@@ -1,0 +1,34 @@
+# vivo X200 Series (V2561 / PD2458F_EX / India V2561i)
+# MediaTek Dimensity 9400 3nm Flagship · Android 16 / OriginOS 16 & FuntouchOS 16
+#
+# Apply:  powershell -ExecutionPolicy Bypass -File tools\phone-disable.ps1 devices\vivo-x200\debloat.txt
+# Undo:   powershell -ExecutionPolicy Bypass -File tools\phone-restore.ps1 devices\vivo-x200\debloat.txt
+#
+# Verified Discoveries & Fixes:
+# - Runaway Gallery AI Indexing: com.vivo.gallery consumed ~127% CPU in background, keeping
+#   media hardware codecs active. Tame via AppOps:
+#     adb shell cmd appops set com.vivo.gallery RUN_IN_BACKGROUND ignore
+#     adb shell cmd appops set com.vivo.gallery WAKE_LOCK ignore
+# - Ghost Clone Space: User 999 ran parallel Google Play Services location polling without
+#   any active user clone apps. If not using App Clone, purge via:
+#     adb shell pm remove-user 999
+#
+# DO NOT DISABLE on vivo (load-bearing):
+# com.vivo.daemonService                  # Core device service framework
+# com.android.systemui                    # Navigation bar & notification shade
+# com.android.settings                    # Settings app
+# com.vivo.fingerprint                    # In-display optical fingerprint scanner
+# com.android.phone                       # Cellular telephony provider
+# com.google.android.dialer               # Primary dialer
+
+# --- Lockscreen Content & Poster Feed ---
+com.vivo.magazine                         # Lockscreen Poster (Glance equivalent) - background Wi-Fi wallpaper downloader
+
+# --- Promotional App Store & Discovery ---
+com.vivo.appstore                         # V-Appstore (background update checks and app recommendations)
+com.vivo.game                             # vivo Game Center promotional launcher
+com.vivo.globalsearch                     # Global search widget with trending queries
+
+# --- vivo Telemetry & Diagnostic Frameworks ---
+com.vivo.carmode                          # Jovi Smart Car mode (if not using in-car screen projection)
+com.bbk.account                           # vivo Account sync services (optional if using pure Google sync)

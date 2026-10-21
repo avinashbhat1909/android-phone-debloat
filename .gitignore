@@ -1,0 +1,33 @@
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# Python cache & virtual environment
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Private ADB keys, local backups, and personal user setup/report files
+tools/adbkey/
+backup/
+*.dump
+*.log
+# Personal user setup/report files & local dumps (stay local on your PC)
+REPORT.md
+devices/**/REPORT.md
+MY_*_SETUP.md
+MY_PHONE_SETUP.md
+*SETUP.md
+!docs/*.md
+
+# Binary platform tools and executables (download via official Google link)
+tools/platform-tools/
+*.exe
+*.dll
+
