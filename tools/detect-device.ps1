@@ -39,7 +39,10 @@ $brand   = (& $adb @serialArgs shell getprop ro.product.brand).Trim()
 $model   = (& $adb @serialArgs shell getprop ro.product.model).Trim()
 $device  = (& $adb @serialArgs shell getprop ro.product.device).Trim()
 $soc     = (& $adb @serialArgs shell getprop ro.soc.model).Trim()
+if (-not $soc) { $soc = (& $adb @serialArgs shell getprop ro.board.platform).Trim() }
+if (-not $soc) { $soc = (& $adb @serialArgs shell getprop ro.hardware).Trim() }
 $osVer   = (& $adb @serialArgs shell getprop ro.build.version.release).Trim()
+$sdkVer  = (& $adb @serialArgs shell getprop ro.build.version.sdk).Trim()
 $batRaw  = (& $adb @serialArgs shell "dumpsys battery") | Out-String
 $batLvl  = if ($batRaw -match 'level:\s*(\d+)') { $matches[1] } else { '100' }
 $batHlth = if ($batRaw -match 'health:\s*(\d+)') { $matches[1] } else { '2' }
@@ -75,7 +78,7 @@ Write-Host "           ANDROID PHONE DEBLOATER - AUTO DETECT            " -Foreg
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host "  Brand & Model:   $brand $model ($device)" -ForegroundColor White
 Write-Host "  SoC Platform:    $(if ($soc) { $soc } else { 'Standard SoC' })" -ForegroundColor White
-Write-Host "  Android Version: Android $osVer" -ForegroundColor White
+Write-Host "  Android Version: Android $osVer$(if ($sdkVer) { " (API $sdkVer)" } else { '' })" -ForegroundColor White
 Write-Host "  Battery Level:   ${batLvl}% (Health: $healthDesc)" -ForegroundColor Green
 
 if ($matchedProfile) {

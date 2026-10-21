@@ -2,7 +2,7 @@
 
 Paste the prompt below into **Claude Code**, **Antigravity**, **Cursor**, or any coding assistant with shell access on a computer connected to your Android phone via USB.
 
-Works on **Xiaomi / POCO / Redmi** (HyperOS / MIUI), **vivo / iQOO** (OriginOS / FuntouchOS), **Samsung** (One UI), **OnePlus / OPPO / Realme** (OxygenOS / ColorOS), **Motorola**, **Nothing OS**, and more.
+Supports **Android 9 (Pie) through Android 16+** across **Xiaomi / POCO / Redmi** (HyperOS / MIUI), **vivo / iQOO** (OriginOS / FuntouchOS), **Samsung** (One UI), **OnePlus / OPPO / Realme** (OxygenOS / ColorOS), **Motorola**, **Nothing OS**, and more. Ideal for revitalizing older devices by freeing physical RAM and eliminating background storage I/O.
 
 ---
 
@@ -37,7 +37,7 @@ Before running the prompt, ensure Android Debug Bridge (`adb`) is installed or d
 ```markdown
 I want to eliminate standby battery drain, strip OEM telemetry/ads, and optimize my Android smartphone to feel like a clean, lightweight Pixel/AOSP device.
 My phone model is: <MODEL NAME / BRAND HERE>.
-Work step-by-step on the real connected device via ADB. Do NOT unlock the bootloader, do NOT root, and ensure Google Play Integrity, banking apps, and camera pipelines remain 100% functional. All changes must be fully reversible.
+Work step-by-step on the real connected device via ADB. Supports Android 9 (API 28) through Android 16+. Do NOT unlock the bootloader, do NOT root, and ensure Google Play Integrity, banking apps, and camera pipelines remain 100% functional. All changes must be fully reversible.
 
 ### 1. Connection & Live Baseline Diagnostics
 - Run `tools/detect-device.ps1` to automatically inspect connected model (`ro.product.model`), SoC platform, Android / OS build version, battery health, and match against verified profiles in `devices/`.
@@ -83,7 +83,7 @@ Work step-by-step on the real connected device via ADB. Do NOT unlock the bootlo
 
 ### 4. Optional Enhancements
 - Clean AOSP Launcher: To complete the "Clean Pixel" makeover, recommend installing [Lawnchair 14](https://github.com/LawnchairLauncher/lawnchair/releases) (open-source AOSP Launcher3 base). Guide the user to set it as default while keeping the OEM stock launcher dormant so the native Recent Apps multitasking switcher is preserved.
-- System-Wide Tracker Sinkhole: Offer configuring Private DNS to AdGuard (`tools/set-dns.ps1 -Provider AdGuard`) or Cloudflare (`tools/set-dns.ps1 -Provider Cloudflare`) for 0% battery penalty socket-level ad/tracker blocking.
+- System-Wide Tracker Sinkhole: Offer configuring Private DNS to AdGuard (`tools/set-dns.ps1 -Provider AdGuard`) or Cloudflare (`tools/set-dns.ps1 -Provider Cloudflare`) for 0% battery penalty socket-level ad/tracker blocking (native on Android 9+).
 
 ### 5. Verification & Deliverables (Reports & Personal Setup Guide)
 - Re-run `dumpsys power` to confirm:

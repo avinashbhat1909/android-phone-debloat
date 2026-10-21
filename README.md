@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/Android-14%20%7C%2015%20%7C%2016-green.svg" alt="Android Versions">
+  <img src="https://img.shields.io/badge/Android-9%20to%2016%2B-green.svg" alt="Android Versions">
   <img src="https://img.shields.io/badge/Play%20Integrity-Passing-brightgreen.svg" alt="SafetyNet / Play Integrity">
   <img src="https://img.shields.io/badge/Banking%20Apps-100%25%20Working-success.svg" alt="Banking Apps">
 </p>
@@ -15,6 +15,7 @@
 <p align="center">
   <a href="PROMPT.md"><b>The Prompt</b></a> ·
   <a href="#supported-devices"><b>Tested Devices</b></a> ·
+  <a href="#android-version-compatibility-android-9-to-16"><b>OS Compatibility</b></a> ·
   <a href="#quick-start-guide"><b>Quick Start</b></a> ·
   <a href="CONTRIBUTING.md"><b>Contribute</b></a>
 </p>
@@ -58,6 +59,15 @@ Most debloat guides either break core system components (like banking apps, came
 *Have a different device? Check out [CONTRIBUTING.md](CONTRIBUTING.md) to add your model!*
 
 ---
+
+## Android Version Compatibility (Android 9 to 16+)
+
+While modern flagships benefit from reduced telemetry and battery preservation, **older Android phones (Android 9 Pie through Android 13) experience the most dramatic performance gains**:
+
+* **Revitalize 3 GB – 6 GB RAM Devices**: Stripping 30–50 OEM background daemons frees up **~1 GB of physical RAM**, preventing aggressive background app killing and multitasking redraws.
+* **Stop Slow Flash Wear (eMMC 5.1)**: Older phones rely on slower eMMC storage. Stopping continuous disk logging from telemetry engines (`miui.analytics`, `bbklog`, crash loggers) completely eliminates UI micro-stutters.
+* **Native Private DNS (Android 9+)**: Android 9 (API 28) is the milestone version where Google introduced OS-level DNS-over-TLS. Our [`tools/set-dns.ps1`](tools/set-dns.ps1) blocks ads and tracking with **0% battery penalty** without needing battery-draining VPN apps.
+* **Fewer OEM Security Lockouts**: Android 9 and 10 firmware (MIUI 10/11/12, One UI 1/2, FuntouchOS 9/10) have almost none of the aggressive `DELETE_FAILED_USER_RESTRICTED` package lockouts found on modern Android 14–16, allowing clean package uninstalls across the board.
 
 ## Quick Start Guide
 

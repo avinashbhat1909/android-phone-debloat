@@ -31,6 +31,14 @@ if ($devCheck -notmatch 'device') {
     throw "Device not connected or not authorized! Run '& tools\platform-tools\adb.exe devices' to check."
 }
 
+$sdkVer = (& $adb @serialArgs shell getprop ro.build.version.sdk).Trim()
+if ($sdkVer -and [int]$sdkVer -lt 28) {
+    Write-Host "Warning: Native Private DNS (DNS-over-TLS) requires Android 9 (API 28) or newer." -ForegroundColor Yellow
+    Write-Host "Your device is running API $sdkVer. Native Private DNS settings are not supported on Android 8 or older." -ForegroundColor Yellow
+    Write-Host "Recommendation: Use a local DNS app such as Intra, RethinkDNS, or AdGuard on Android 8 and below." -ForegroundColor Gray
+    exit 1
+}
+
 $providerMap = @{
     'AdGuard'    = 'dns.adguard-dns.com'
     'Cloudflare' = 'one.one.one.one'
