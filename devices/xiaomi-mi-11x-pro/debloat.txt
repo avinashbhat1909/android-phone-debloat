@@ -1,8 +1,8 @@
 # Xiaomi Mi 11X Pro (M2012K11I / India, haydn_in)
 # Qualcomm Snapdragon 888 5G · Android 14 / Xiaomi HyperOS 1.0 (Build V816)
 #
-# Apply:  powershell -ExecutionPolicy Bypass -File tools\phone-disable.ps1 devices\xiaomi-mi-11x-pro\debloat.txt
-# Undo:   powershell -ExecutionPolicy Bypass -File tools\phone-restore.ps1 devices\xiaomi-mi-11x-pro\debloat.txt
+# Apply:  powershell -ExecutionPolicy Bypass -File devices\xiaomi-mi-11x-pro\apply-debloat.ps1
+# Undo:   powershell -ExecutionPolicy Bypass -File devices\xiaomi-mi-11x-pro\restore.ps1
 #
 # Verified Results on Real Hardware:
 # - Active Wake Locks: Dropped from 4 blockers to 0 (Zero wake locks; instant deep sleep).
