@@ -1,4 +1,4 @@
-# One-Click Safe Debloat & Optimization for vivo X200 Series
+# One-Click Safe Debloat & Optimization for vivo X200T
 param([string]$Serial)
 
 $repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -11,7 +11,7 @@ if (-not (Test-Path $adb)) {
 $serialArgs = @()
 if ($Serial) { $serialArgs = @('-s', $Serial) }
 
-Write-Host "=== Applying vivo X200 Safe Debloat ===" -ForegroundColor Cyan
+Write-Host "=== Applying vivo X200T Safe Debloat ===" -ForegroundColor Cyan
 
 # 1. Uninstalls for User 0
 $uninstalls = @(

@@ -1,11 +1,11 @@
-# vivo X200 Series (V2561 / PD2458F_EX / India V2561i)
+# vivo X200T (V2561 / PD2458F_EX / India V2561i)
 # MediaTek Dimensity 9400 3nm Flagship · Android 16 / OriginOS 16 & FuntouchOS 16
 #
 # Apply Debloat & Restrictions:
-#   powershell -ExecutionPolicy Bypass -File devices\vivo-x200\apply-debloat.ps1
+#   powershell -ExecutionPolicy Bypass -File devices\vivo-x200t\apply-debloat.ps1
 #
 # Restore:
-#   powershell -ExecutionPolicy Bypass -File devices\vivo-x200\restore.ps1
+#   powershell -ExecutionPolicy Bypass -File devices\vivo-x200t\restore.ps1
 
 # ==============================================================================
 # 1. CLEAN UNINSTALLS FOR USER 0 (pm uninstall -k --user 0)

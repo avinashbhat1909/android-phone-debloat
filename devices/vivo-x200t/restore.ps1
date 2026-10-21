@@ -1,4 +1,4 @@
-# One-Click Restore Script for vivo X200 Series
+# One-Click Restore Script for vivo X200T
 param([string]$Serial)
 
 $repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -11,7 +11,7 @@ if (-not (Test-Path $adb)) {
 $serialArgs = @()
 if ($Serial) { $serialArgs = @('-s', $Serial) }
 
-Write-Host "=== Restoring vivo X200 Debloated Packages ===" -ForegroundColor Cyan
+Write-Host "=== Restoring vivo X200T Debloated Packages ===" -ForegroundColor Cyan
 
 # 1. Restore uninstalled packages
 $uninstalls = @(
