@@ -5,7 +5,7 @@ One folder per phone model, each containing a `debloat.txt` listing the safe-to-
 | Folder | Device Model | Platform / SoC | OS / Skin | Packages | Key Notes & Verified Results |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | [`xiaomi-mi-11x-pro/`](xiaomi-mi-11x-pro/) | Xiaomi Mi 11X Pro (`haydn_in`, `M2012K11I`) | Qualcomm Snapdragon 888 5G | Android 14 / Xiaomi HyperOS 1.0 (V816) | **35 packages** | Active wake locks dropped from 4 to 0; standby CPU drain dropped >55%; stock launcher dormant for Recent Apps switcher; Themes AppOps lockdown. |
-| [`vivo-x200/`](vivo-x200/) | vivo X200 / X200s (`V2561`, `PD2458F_EX`) | MediaTek Dimensity 9400 3nm | Android 16 / OriginOS 16 & FuntouchOS 16 | **Gallery AI + Apps** | Tamed runaway gallery AI indexing (~127% CPU drain); eliminated ghost `User 999` clone space polling; lockscreen poster sync stopped. |
+| [`vivo-x200/`](vivo-x200/) | vivo X200 / X200s (`V2561`, `PD2458F_EX`) | MediaTek Dimensity 9400 3nm | Android 16 / OriginOS 16 & FuntouchOS 16 | **16 packages** | Active wake locks dropped to 0; eliminated ghost `User 999` clone space; Lockscreen Poster & V-Appstore neutralized; AdGuard Private DNS enabled. |
 
 ---
 
