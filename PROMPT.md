@@ -40,42 +40,50 @@ My phone model is: <MODEL NAME / BRAND HERE>.
 Work step-by-step on the real connected device via ADB. Do NOT unlock the bootloader, do NOT root, and ensure Google Play Integrity, banking apps, and camera pipelines remain 100% functional. All changes must be fully reversible.
 
 ### 1. Connection & Live Baseline Diagnostics
-- Verify device connection with `adb get-state` and inspect model (`ro.product.model`), SoC platform, and Android / OS build version.
-- Check if ADB is in PATH or present in `tools/platform-tools/adb`. If missing, notify me to install it via winget/brew or provide the direct Google download link.
+- Run `tools/detect-device.ps1` to automatically inspect connected model (`ro.product.model`), SoC platform, Android / OS build version, battery health, and match against verified profiles in `devices/`.
+- Check if ADB is in PATH or present in `tools/platform-tools/adb`. If missing, notify user to install it via winget/brew or provide the direct Google download link.
 - Capture a live baseline power dump before touching anything:
   - `dumpsys battery` (temperature, health, level)
   - `dumpsys power` (check active wake locks preventing deep sleep)
-  - `dumpsys cpuinfo` (find runaway background services)
+  - `dumpsys cpuinfo` (find runaway background services or CPU thrashers)
   - `pm list users` (detect phantom second space or app clone containers like User 10 or User 999)
 
-### 2. Backup First
-- Create a backup directory and dump:
-  - Full installed packages: `pm list packages -f`
+### 2. Backup First (Pre-Flight Snapshot)
+- Run `tools/backup-packages.ps1` to capture a complete device snapshot:
+  - Full installed packages with APK filesystem paths: `pm list packages -f -u`
   - Current disabled packages: `pm list packages -d`
-  - System settings: `settings list system`, `settings list global`
-- Prepare a `restore.ps1` (or `restore.sh`) script immediately that can re-enable every package modified.
+  - Active multi-user profile states: `pm list users`
+  - Auto-generated 1-click restore script: `backup/<model>_<timestamp>/restore-snapshot.ps1`
+- Prepare or verify a device-specific `restore.ps1` script immediately that can re-enable every package modified.
 
 ### 3. Safe Debloat & Optimization Rules
+- Preview First: Run a dry-run preview (`tools/detect-device.ps1 -DryRun` or `tools/phone-disable.ps1 <list> -DryRun`) so the user can inspect which packages are currently active vs already clean before modifying the phone.
 - Categorize candidate packages into:
-  1. OEM Telemetry & Diagnostics (background loggers, analytics, catchlog)
+  1. OEM Telemetry & Diagnostics (background loggers, analytics, survey agents)
   2. Ad Delivery Engines & Feed Scrapers (lock screen wallpaper carousel / Glance, promo feed cards)
   3. Preloaded Partner Bloat (Facebook daemons, third-party shopping/games)
   4. Redundant Duplicate Apps (OEM messaging, calendar, or browser when Google / Brave is installed)
-- Package Removal Method:
-  - Use `pm uninstall -k --user 0 <pkg>` (or `pm disable-user --user 0` where supported).
+- Package Removal & Lockdown Methods:
+  - Clean Uninstalls: Use `pm uninstall -k --user 0 <pkg>` for User 0 removal.
+  - Package Manager Disabling: Use `pm disable-user --user 0 <pkg>` for system services that reject uninstall (e.g. `com.vivo.magazine`).
+  - AppOps Neutering: For ROM-protected packages where the OEM blocks uninstall/disable with security exceptions (e.g. Xiaomi Themes, vivo V-Appstore, Global Search, HiBoard), use AppOps to freeze them permanently in deep sleep:
+    `cmd appops set <pkg> RUN_IN_BACKGROUND ignore`
+    `cmd appops set <pkg> RUN_ANY_IN_BACKGROUND ignore`
+    `cmd appops set <pkg> WAKE_LOCK ignore`
+    `cmd appops set <pkg> SYSTEM_ALERT_WINDOW ignore`
   - CRITICAL SAFETY: NEVER touch or disable:
     - `com.android.systemui`
     - `com.android.settings`
     - Core telephony / dialer / emergency call providers
     - Core OEM security infrastructure that hosts lockscreen security or fingerprint auth
 - Device-Specific Guardrails:
-  - Xiaomi / HyperOS: Preserve `com.miui.home` in a dormant state if the user wants native Recent Apps multitasking gestures. Use AppOps (`RUN_IN_BACKGROUND: ignore`, `WAKE_LOCK: ignore`) to freeze background drain on retained system apps (like Themes).
-  - vivo / OriginOS: Tame runaway background media indexing in `com.vivo.gallery` via AppOps and terminate ghost clone containers (`User 999`) if unused.
+  - Xiaomi / HyperOS: Preserve `com.miui.home` in a dormant state if the user wants native Recent Apps multitasking gestures. Use AppOps to freeze background drain on Themes (`com.android.thememanager`).
+  - vivo / OriginOS & FuntouchOS: Disable Lockscreen Poster (`com.vivo.magazine`), neuter V-Appstore and Global Search via AppOps, check charging AI gallery indexing behavior, and terminate ghost clone containers (`User 999`) if unused.
   - Samsung / One UI: Preserve Samsung Knox and biometric unlock services.
 
 ### 4. Optional Enhancements
 - Clean AOSP Launcher: To complete the "Clean Pixel" makeover, recommend installing [Lawnchair 14](https://github.com/LawnchairLauncher/lawnchair/releases) (open-source AOSP Launcher3 base). Guide the user to set it as default while keeping the OEM stock launcher dormant so the native Recent Apps multitasking switcher is preserved.
-- System-Wide Tracker Sinkhole: Offer configuring Private DNS to `dns.adguard-dns.com` (`settings put global private_dns_specifier dns.adguard-dns.com` and `settings put global private_dns_mode hostname`) for 0% battery penalty socket-level ad/tracker blocking.
+- System-Wide Tracker Sinkhole: Offer configuring Private DNS to AdGuard (`tools/set-dns.ps1 -Provider AdGuard`) or Cloudflare (`tools/set-dns.ps1 -Provider Cloudflare`) for 0% battery penalty socket-level ad/tracker blocking.
 
 ### 5. Verification & Deliverables (Reports & Personal Setup Guide)
 - Re-run `dumpsys power` to confirm:
