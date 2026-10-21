@@ -53,7 +53,7 @@ Most debloat guides either break core system components (like banking apps, came
 | Device | Platform / SoC | OS / Skin | Uninstalled Packages | Profile Link |
 | :--- | :--- | :--- | :---: | :--- |
 | **Xiaomi Mi 11X Pro** (`M2012K11I` / `haydn_in`) | Qualcomm Snapdragon 888 5G | Android 14 / HyperOS 1.0 | **35 packages** | [View Profile](devices/xiaomi-mi-11x-pro/) |
-| **vivo X200 Series** (`V2561` / `PD2458F_EX`) | MediaTek Dimensity 9400 3nm | Android 16 / OriginOS 16 | Gallery AI Tamer & Audit | [View Profile](devices/vivo-x200/) |
+| **vivo X200T** (`V2561` / `PD2458F_EX`) | MediaTek Dimensity 9400 3nm | Android 16 / OriginOS 16 & FuntouchOS 16 | **16 packages** | [View Profile](devices/vivo-x200t/) |
 
 *Have a different device? Check out [CONTRIBUTING.md](CONTRIBUTING.md) to add your model!*
 
@@ -63,10 +63,8 @@ Most debloat guides either break core system components (like banking apps, came
 
 ### Prerequisites
 1. **Android Debug Bridge (`adb`):**
-   * Download the official Google Platform-Tools directly:
-     * [Windows ZIP](https://dl.google.com/android/repository/platform-tools-latest-windows.zip)
-     * [macOS ZIP](https://dl.google.com/android/repository/platform-tools-latest-darwin.zip)
-     * [Linux ZIP](https://dl.google.com/android/repository/platform-tools-latest-linux.zip)
+   * Download official Google Platform-Tools directly:
+     * [Windows ZIP](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) · [macOS ZIP](https://dl.google.com/android/repository/platform-tools-latest-darwin.zip) · [Linux ZIP](https://dl.google.com/android/repository/platform-tools-latest-linux.zip)
    * Or install via package manager:
      * Windows: `winget install Google.PlatformTools`
      * macOS: `brew install android-platform-tools`
@@ -75,23 +73,44 @@ Most debloat guides either break core system components (like banking apps, came
    - Tap **Build Number** 7 times in *Settings > About Phone*.
    - In *Developer Options*, enable:
      - **USB Debugging**
-     - **Install via USB** (Xiaomi / POCO: enable in Developer Options)
-     - **USB Debugging (Security settings)** (Xiaomi / POCO: allows permission automation)
+     - **Install via USB** (Xiaomi / POCO)
+     - **USB Debugging (Security settings)** (Xiaomi / POCO)
 3. Connect your phone via USB and tap **Always allow from this computer** when prompted.
 
 ---
 
-### 1. Run Live Diagnostics
-Check your device's current battery status and see which apps are holding the CPU awake right now:
+### Step 1: Auto-Detect Your Phone
+Run the unified smart detector. It will identify your phone model, battery health, and automatically match your device profile:
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\phone-diag.ps1
+powershell -ExecutionPolicy Bypass -File tools\detect-device.ps1
 ```
 
-### 2. Apply Debloat for Your Device
-Run `tools\phone-disable.ps1` pointing to your device's `debloat.txt`:
-
+### Step 2: Take a Pre-Flight Backup (Recommended)
+Before making any changes, snapshot your installed packages and multi-user configurations:
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\phone-disable.ps1 devices\xiaomi-mi-11x-pro\debloat.txt
+powershell -ExecutionPolicy Bypass -File tools\backup-packages.ps1
+```
+*(Creates a timestamped snapshot in `backup/` with a 1-click `restore-snapshot.ps1` script).*
+
+### Step 3: Preview with Dry-Run Mode
+Inspect what will be removed without actually modifying your phone:
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\detect-device.ps1 -DryRun
+```
+
+### Step 4: Apply Debloat
+Apply the safe, verified debloat specification:
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\detect-device.ps1 -Apply
+```
+*Or run your device's dedicated script directly:*
+* **vivo X200T:** `powershell -ExecutionPolicy Bypass -File devices\vivo-x200t\apply-debloat.ps1`
+* **Xiaomi Mi 11X Pro:** `powershell -ExecutionPolicy Bypass -File devices\xiaomi-mi-11x-pro\apply-debloat.ps1`
+
+### Step 5: Enable AdGuard Private DNS
+Block in-app banner ads, popups, and background telemetry at the socket layer (0% battery drain):
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\set-dns.ps1 -Provider AdGuard
 ```
 
 ### 3. Setup a Clean AOSP Launcher (Recommended)
